@@ -1,4 +1,5 @@
 import csv
+from hash_table import ChainingHashTable
 from pprint import pprint
 
 with open("./WGUPS Distance Table test.csv") as f:
@@ -22,5 +23,5 @@ with open("./WGUPS Package File.csv") as f:
 
 pprint(address_read)
 
-
+hash_map = ChainingHashTable()
 

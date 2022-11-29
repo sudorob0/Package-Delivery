@@ -17,17 +17,16 @@ class Distance:
         row = int(current_location)
         column = int(from_location)
         distance = self.distance_reader[row][column]
-        if distance == None | distance == "":
+        if distance == None or distance == "":
             distance = self.distance_reader[column][row]
             return distance
 
 
-    def check_location_from_address(self, location):
-        for name in self.name_reader:
-            if location - name[2]:
-                return name[0]
+    def check_current_distance(self, row, column):
+        distance = distance_reader[row][column]
+        if distance == "":
+            break
 
-    def check_time(self, truck, name):
-        truck_timeline = []
-        if name == "truck1"
+
+
 
