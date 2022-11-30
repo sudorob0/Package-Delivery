@@ -11,19 +11,17 @@ with open("./WGUPS Address File.csv") as f:
     # next(reader, None)  # skip the headers
     address_read = [row for row in reader]
 
+def check_distance(x_value, y_value):
+    """Find the distance between two addresses"""
+    distance = distance_read[x_value][y_value]
+    if distance == "":
+        distance = distance_read[y_value][x_value]
+    return float(distance)
 
-
-    def check_distance(self, x_value, y_value):
-        """Find the distance between two addresses"""
-        distance = distance_read[x_value][y_value]
-        if distance == "":
-            distance = distance_read[y_value][x_value]
-        return float(distance)
-
-    def load_address(self, address):
-        for row in address_read:
-            if address in row[2]:
-                return int(row[0])
+def load_address(address):
+    for row in address_read:
+        if address in row[2]:
+            return int(row[0])
 
 
 
