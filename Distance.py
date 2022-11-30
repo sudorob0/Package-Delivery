@@ -1,31 +1,29 @@
 import csv
 import datetime
 
-class Distance:
+with open("./WGUPS Distance Table.csv") as f:
+    reader = csv.reader(f, delimiter=",", quotechar='"')
+    # next(reader, None)  # skip the headers
+    distance_read = [row for row in reader]
 
-    # pull distance addresses and names from csv file
-    with open('WGUPS Address File.csv') as address_file:
-        address_reader = list(csv.reader(address_file, delimiter=','))
-
-    # pull distance data from csv file
-    with open('WGUPS Distance Table.csv') as distance_file:
-        distance_reader = list(csv.reader(distance_file, delimiter=','))
-
-    print(distance_reader)
-    # get distance between locations
-    def check_distance(self, current_location, from_location):
-        row = int(current_location)
-        column = int(from_location)
-        distance = self.distance_reader[row][column]
-        if distance == None or distance == "":
-            distance = self.distance_reader[column][row]
-            return distance
+with open("./WGUPS Address File.csv") as f:
+    reader = csv.reader(f, delimiter=",", quotechar='"')
+    # next(reader, None)  # skip the headers
+    address_read = [row for row in reader]
 
 
-    def check_current_distance(self, row, column):
-        distance = distance_reader[row][column]
+
+    def check_distance(self, x_value, y_value):
+        """Find the distance between two addresses"""
+        distance = distance_read[x_value][y_value]
         if distance == "":
-            break
+            distance = distance_read[y_value][x_value]
+        return float(distance)
+
+    def load_address(self, address):
+        for row in address_read:
+            if address in row[2]:
+                return int(row[0])
 
 
 
