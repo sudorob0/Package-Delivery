@@ -1,7 +1,12 @@
+"""
+Robert Uhl
+010191437
+NHP2 — NHP2 Task 1: WGUPS Routing Program
+"""
 import csv
-
 import Truck
-from hash_table import ChainingHashTable
+from HashTable import ChainingHashTable
+from Package import Package
 from pprint import pprint
 import Distance
 
@@ -12,32 +17,49 @@ with open("./WGUPS Package File.csv") as f:
     package_read = [row for row in reader]
 
 
-def load_package_data(filename, package_hash_table):
-    with open(filename) as package_info:
-        package_data = csv.reader(package_info)
+# Loads the package data
+def load_package_data(filename):
+    with open(filename) as package_list:
+        package_data = csv.reader(package_list, delimiter=",")
         for package in package_data:
-            pID = int(package[0])
-            pAddress = package[1]
-            pCity = package[2]
-            pState = package[3]
-            pZipcode = package[4]
-            pDeadline_time = package[5]
-            pWeight = package[6]
-            pStatus = "At Hub"
+            package_id = int(package[0])
+            package_address = package[1]
+            package_city = package[2]
+            package_state = package[3]
+            package_zipcode = package[4]
+            package_deadline = package[5]
+            package_weight = package[6]
 
-            # Package object
-            p = Package(pID, pAddress, pCity, pState, pZipcode, pDeadline_time, pWeight, pStatus)
+            package = Package(
+                package_id,
+                package_address,
+                package_city,
+                package_state,
+                package_zipcode,
+                package_deadline,
+                package_weight,
+            )
 
-            # Insert data into hash table
-            package_hash_table.insert(pID, p)
+            hash_table.insert(package_id, package)
 
 
 # create truck instances
-truck1 = Truck.Truck(capacity=16, speed=18, load=None, packages=[1, 13, 14, 15, 16, 19, 20, 21, 30, 34, 40], mileage=.0, address='4001 South 700 East', depart_time=8)
+truck1 = Truck.Truck(
+    packages=[1, 13, 14, 15, 16, 19, 20, 21, 30, 34, 40],
+    depart_time=8
+)
 
-truck2 = Truck.Truck(capacity=16, speed=18, load=None, packages=[3, 6, 18, 36, 37, 38], mileage=.0, address='4001 South 700 East', depart_time=8)
+truck2 = Truck.Truck(
+    packages=[3, 6, 18, 36, 37, 38],
+    depart_time=8
+                     )
 
-truck3 = Truck.Truck(capacity=16, speed=18, load=None, packages=[2, 4, 5, 25, 26, 28, 31, 32], mileage=.0, address='4001 South 700 East', depart_time=8)
+truck3 = Truck.Truck(
+    packages=[2, 4, 5, 25, 26, 28, 31, 32],
+    depart_time=8
+)
 
-# create hash map
-hash_map = ChainingHashTable()
+
+hash_table = ChainingHashTable()
+
+load_package_data("WGUPS Package File.csv", hash_table)
