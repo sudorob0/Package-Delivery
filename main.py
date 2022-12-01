@@ -4,7 +4,6 @@ Robert Uhl
 NHP2 — NHP2 Task 1: WGUPS Routing Program
 """
 # python libraries
-import csv
 import datetime
 # project files
 import Truck
@@ -49,24 +48,25 @@ def deliver_packages(truck):
 
     while len(not_delivered) > 0:
         # set address to be longer than any address we will get, so it will be replaced
-        next_address = 100000
+        next_address = 10000
         next_package = None
         for package in not_delivered:
             if check_distance(get_address_id(truck.address), get_address_id(package.address)) <= next_address:
                 next_address = check_distance(get_address_id(truck.address), get_address_id(package.address))
                 next_package = package
-                # Adds next closest package to the truck package list
-            truck.packages.append(next_package.ID)
-            # Removes the same package from the not_delivered list
-            not_delivered.remove(next_package)
-            # Takes the mileage driven to this packaged into the truck.mileage attribute
-            truck.mileage += next_address
-            # Updates truck's current address attribute to the package it drove to
-            truck.address = next_package.address
-            # Updates the time it took for the truck to drive to the nearest package
-            truck.time += datetime.timedelta(hours=next_address / 18)
-            next_package.delivery_time = truck.time
-            next_package.departure_time = truck.depart_time
+                print(next_package)
+        # Adds next closest package to the truck package list
+        truck.packages.append(next_package.id)
+        # Removes the same package from the not_delivered list
+        not_delivered.remove(next_package)
+        # Takes the mileage driven to this packaged into the truck.mileage attribute
+        truck.mileage += next_address
+        # Updates truck's current address attribute to the package it drove to
+        truck.address = next_package.address
+        # Updates the time it took for the truck to drive to the nearest address
+        truck.time += datetime.timedelta(hours=next_address / 18)
+        next_package.delivery_time = truck.time
+        next_package.departure_time = truck.depart_time
 
 
 deliver_packages(truck1)

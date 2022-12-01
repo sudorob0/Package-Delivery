@@ -10,15 +10,15 @@ ADDRESS_FILE = "WGUPS Address File.csv"
 with open(f"{DIRECTORY_PATH}{DISTANCE_FILE}") as f:
     reader = csv.reader(f, delimiter=",", quotechar='"')
     # next(reader, None)  # skip the headers
-    distance_read = [row for row in reader]
+    distance_data = [row for row in reader]
 
 # Read address data from CSV
 with open(f"{DIRECTORY_PATH}{ADDRESS_FILE}") as f:
     reader = csv.reader(f, delimiter=",", quotechar='"')
     # next(reader, None)  # skip the headers
-    address_read = [row for row in reader]
+    address_data = [row for row in reader]
 
-def check_distance(distance_data, x_address_id: int, y_address_id: int):
+def check_distance(x_address_id: int, y_address_id: int):
     """Find the distance between two addresses. Supply address id integer for arguments."""
     distance = distance_data[x_address_id][y_address_id]
     # if distance is blank reverse the ids
@@ -27,7 +27,7 @@ def check_distance(distance_data, x_address_id: int, y_address_id: int):
     return float(distance)
 
 
-def get_address_id(address_data, address):
+def get_address_id(address):
     """Get address id from supplied address string"""
     for row in address_data:
         if address in row[2]:
