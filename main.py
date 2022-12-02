@@ -19,17 +19,17 @@ package_hash_table = HashTable.ChainingHashTable()
 
 # create truck instances, manually load packages and set departure times
 truck1 = Truck.Truck(
-    packages=[1, 6, 13, 14, 15, 16, 20, 21, 22, 29, 30, 34, 37, 40],
+    packages=[1, 6, 13, 14, 15, 16, 20, 21, 22, 25, 29, 30, 34, 37, 40],
     depart_time=datetime.timedelta(hours=8, minutes=0),
 )
 
 truck2 = Truck.Truck(
-    packages=[3, 12, 17, 18, 19, 23, 24, 26, 27, 35, 36, 38, 39],
+    packages=[3, 12, 17, 18, 19, 23, 24, 26, 27, 31, 35, 36, 38, 39],
     depart_time=datetime.timedelta(hours=9, minutes=10),
 )
 
 truck3 = Truck.Truck(
-    packages=[2, 4, 5, 7, 8, 9, 10, 11, 25, 28, 31, 32, 33],
+    packages=[2, 4, 5, 7, 8, 9, 10, 11, 28, 32, 33],
     depart_time=datetime.timedelta(hours=11, minutes=5),
 )
 
@@ -41,7 +41,7 @@ num_of_packages = len(truck1.packages) + len(truck2.packages) + len(truck3.packa
 
 
 def deliver_packages(truck):
-    """Method for ordering the packages in a truck using nearest neighbor algorithm"""
+    """Method for ordering the packages in a truck using the greedy algorithm nearest neighbor """
     # create empty list to hole packages not yet delivered
     not_delivered = []
     # Loop through packages in a truck
@@ -102,17 +102,19 @@ def main():
     current_time = datetime.timedelta(hours=7, minutes=0)
 
     # Print welcome message
-    print("""Welcome to the WGUPS CLI.""")
+    print("*" * 33)
+    print(f"||  Welcome to the WGUPS CLI.  ||")
+    print("*" * 33 )
 
     # Main loop.  Prompts user for actions until exit is chosen.
     while True:
         print(
             f""" 
-        Current time is {current_time}
+    *** Current time: {current_time} ***
         1) Set time of day
-        2) Current package status
+        2) Status of Packages
         3) Truck status
-        4) Single package status
+        4) Package Lookup
         0) Exit """
         )
         # user input
@@ -124,11 +126,12 @@ def main():
             minute = input("Please enter what minute it is:")
             # Update current time with user input
             current_time = datetime.timedelta(hours=int(hour), minutes=int(minute))
+            print("_" * 120)
         elif selection == "2":
-            print(f"Current Time: {current_time}")
+            print(f"\n\t*** Current time: {current_time} ***")
             # header
-            print("ID\t| Deadline\t| Status\t\t| Departure\t\t| Delivery\t\t| Address")
-            print("-" * 80)
+            print("ID\t| Deadline\t| Status\t\t| Departure\t\t| Delivery\t\t| Address\t\t\t\t\t\t\t\t\t\t ; Notes")
+            print("-" * 140)
             # Loop through all packages
             for package_id in range(1, num_of_packages + 1):
                 # Find package in hash table
@@ -146,10 +149,11 @@ def main():
                 if package.deadline == "EOD":
                     format = "\t"
                 print(
-                    f"{package.id}\t| {package.deadline}{format}\t| {package.status}\t| {timestamp}\t\t| {package.address}"
+                    f"{package.id}\t| {package.deadline}{format}\t| {package.status}\t| {timestamp}\t\t| {package.address}, {package.city}, {package.state}, {package.zipcode}; {package.notes}"
                 )
+            print("_" * 120)
         elif selection == "3":
-            print("Truck #\t\t| Departure\t| Mileage\t| Location\t\t\t| Packages")
+            print("\nTruck #\t\t| Departure\t| Mileage\t| Location\t\t\t| Packages")
             print("-" * 80)
             print(
                 f"Truck 1\t\t| {truck1.depart_time}\t| {truck1.mileage}\t\t| {truck1.address}\t| {truck1.packages}"
@@ -161,27 +165,36 @@ def main():
                 f"Truck 3\t\t| {truck3.depart_time}\t| {truck3.mileage}\t\t| {truck3.address}\t\t| {truck3.packages}"
             )
             print(f"Total Mileage: {truck1.mileage + truck2.mileage + truck3.mileage}")
+            print("_" * 120)
         elif selection == "4":
             user_package_id = input("Enter package ID:\n").strip()
             package = package_hash_table.search(int(user_package_id))
             # Update departure and delivery time if packages are on its way or delivered
             timestamp = (
-                "Departure Time: Awaiting pickup\nDelivery Time: Pending delivery"
+                "Departure Time: Awaiting pickup\n\t\t\tDelivery Time: Pending delivery"
             )
             if "Delivered" in package.status:
-                timestamp = f"Departure: {package.departure_time}\nDelivered: {package.delivery_time}"
-            elif package.status == f"On it's way\t":
-                "Departure:{package.departure_time},\nDelivered:Pending delivery"
+                timestamp = f"Departure: {package.departure_time}\n\t\t\tDelivered: {package.delivery_time}"
+            elif package.status == f"On it's way":
+                timestamp = f"Departure:{package.departure_time},\n\t\t\tDelivered:Pending delivery"
             print(
-                f"Current Time:{current_time}\nAddress: {package.address}\nCurrent Status: {package.status}\n{timestamp}"
+                f"""
+            *** Current time: {current_time} ***
+            Address: {package.address}, {package.city}, {package.state}, {package.zipcode}
+            Weight: {package.weight}
+            Delivery Deadline: {package.deadline}
+            Current Status: {package.status}
+            {timestamp}
+            Notes: {package.notes}"""
             )
+            print("_" * 120)
         elif selection == "0":
             # Exit out of CLI
-            "Your are now leaving the CLI. Goodbye."
+            print("You're are now leaving the CLI. Goodbye.")
             exit()
         else:
             # Else for invalid entries
             print(f"{selection} is an invalid entry. Please try again.")
 
-
+# Call the main function
 main()

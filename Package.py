@@ -12,7 +12,8 @@ class Package:
         state: str,
         zipcode: int,
         weight: float,
-        deadline=None,
+        deadline: str,
+        notes: str
     ):
         """Creates a package object"""
         self.id = package_id
@@ -24,10 +25,11 @@ class Package:
         self.deadline = deadline
         self.departure_time = None
         self.delivery_time = None
-        self.status = "At Headquarters"
+        self.status = "At Hub"
+        self.notes = notes
 
     def __str__(self):
-        return "%s, %s, %s, %s, %s, %s, %s" % (
+        return "%s, %s, %s, %s, %s, %s, %s, s% s%" % (
             self.id,
             self.address,
             self.city,
@@ -35,7 +37,8 @@ class Package:
             self.zipcode,
             self.weight,
             self.deadline,
-            self.status
+            self.status,
+            self.notes
         )
 
     def update_status(self, current_time):
@@ -62,6 +65,7 @@ def load_package_data(filename, hash_table):
             package_zipcode = package[4]
             package_weight = package[5]
             package_deadline = package[6]
+            package_notes = package[7]
 
             # create package object
             package = Package(
@@ -72,6 +76,7 @@ def load_package_data(filename, hash_table):
                 package_zipcode,
                 package_deadline,
                 package_weight,
+                package_notes
             )
 
             # add package to hash table
