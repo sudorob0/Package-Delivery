@@ -20,10 +20,11 @@ class Package:
         self.city = city
         self.state = state
         self.zipcode = zipcode
-        self.deadline = deadline
         self.weight = weight
+        self.deadline = deadline
         self.departure_time = None
         self.delivery_time = None
+        self.status = "At Headquarters"
 
     def __str__(self):
         return "%s, %s, %s, %s, %s, %s, %s" % (
@@ -32,17 +33,19 @@ class Package:
             self.city,
             self.state,
             self.zipcode,
-            self.deadline,
             self.weight,
+            self.deadline,
+            self.status
         )
 
-    def update_status(self, convert_timedelta):
-        if self.delivery_time < convert_timedelta:
-            self.status = "Delivered"
-        elif self.departure_time > convert_timedelta:
-            self.status = "On it's way"
+    def update_status(self, current_time):
+        if self.delivery_time <= current_time:
+            # tabs added to make it line up with the other text when it prints
+            self.status = "Delivered\t\t"
+        elif self.departure_time <= current_time:
+            self.status = "On it's way\t"
         else:
-            self.status = "Pending Pickup"
+            self.status = "At Headquarters"
 
 
 def load_package_data(filename, hash_table):
@@ -57,8 +60,8 @@ def load_package_data(filename, hash_table):
             package_city = package[2]
             package_state = package[3]
             package_zipcode = package[4]
-            package_deadline = package[5]
-            package_weight = package[6]
+            package_weight = package[5]
+            package_deadline = package[6]
 
             # create package object
             package = Package(
@@ -71,9 +74,7 @@ def load_package_data(filename, hash_table):
                 package_weight,
             )
 
-            # Add packages to the package_list
-            # package_list.append(package)
-
+            # add package to hash table
             hash_table.insert(package_id, package)
 
 
