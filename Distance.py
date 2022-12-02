@@ -1,5 +1,4 @@
 import csv
-import datetime
 
 # Change these constants for your file locations
 DIRECTORY_PATH = ""
@@ -9,13 +8,11 @@ ADDRESS_FILE = "WGUPS Address File.csv"
 # Read distance data from CSV
 with open(f"{DIRECTORY_PATH}{DISTANCE_FILE}") as f:
     reader = csv.reader(f, delimiter=",", quotechar='"')
-    # next(reader, None)  # skip the headers
     distance_data = [row for row in reader]
 
 # Read address data from CSV
 with open(f"{DIRECTORY_PATH}{ADDRESS_FILE}") as f:
     reader = csv.reader(f, delimiter=",", quotechar='"')
-    # next(reader, None)  # skip the headers
     address_data = [row for row in reader]
 
 def check_distance(x_address_id: int, y_address_id: int):

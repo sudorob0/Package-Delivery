@@ -41,11 +41,11 @@ class Package:
     def update_status(self, current_time):
         if self.delivery_time <= current_time:
             # tabs added to make it line up with the other text when it prints
-            self.status = "Delivered\t\t"
+            self.status = "Delivered\t"
         elif self.departure_time <= current_time:
-            self.status = "On it's way\t"
+            self.status = "On it's way"
         else:
-            self.status = "At Headquarters"
+            self.status = "At Hub\t"
 
 
 def load_package_data(filename, hash_table):
