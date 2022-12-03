@@ -1,6 +1,5 @@
 from HashTable import ChainingHashTable
 import csv
-import HashTable
 
 
 class Package:
