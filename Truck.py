@@ -1,6 +1,7 @@
 class Truck:
     def __init__(
         self,
+        name: str,
         depart_time: float,
         packages: list,
         capacity=16,
@@ -11,6 +12,7 @@ class Truck:
         delivered_packages = []
     ):
         """Creates a truck object"""
+        self.name = name
         self.capacity = capacity
         self.speed = speed
         self.load = load
@@ -22,7 +24,8 @@ class Truck:
         self.time = depart_time
 
     def __str__(self):
-        return "%s, %s, %s, %s, %s, %s, %s, %s" % (
+        return "%s, %s, %s, %s, %s, %s, %s, %s, %s" % (
+            self.name,
             self.capacity,
             self.speed,
             self.load,

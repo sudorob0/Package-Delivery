@@ -25,6 +25,7 @@ class Package:
         self.deadline = deadline
         self.departure_time = None
         self.delivery_time = None
+        self.truck = None
         self.status = "At Hub"
         self.notes = notes
 
@@ -38,6 +39,7 @@ class Package:
             self.weight,
             self.deadline,
             self.status,
+            self.truck,
             self.notes
         )
 
@@ -49,6 +51,9 @@ class Package:
             self.status = "On it's way"
         else:
             self.status = "At Hub\t"
+
+    def update_truck(self, truck_name):
+        self.truck = truck_name
 
 
 def load_package_data(filename, hash_table):
@@ -81,5 +86,6 @@ def load_package_data(filename, hash_table):
 
             # add package to hash table
             hash_table.insert(package_id, package)
+
 
 

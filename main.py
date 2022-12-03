@@ -19,16 +19,19 @@ package_hash_table = HashTable.ChainingHashTable()
 
 # create truck instances, manually load packages and set departure times
 truck1 = Truck.Truck(
+    name="Truck 1",
     packages=[1, 6, 13, 14, 15, 16, 20, 21, 22, 25, 29, 30, 34, 37, 40],
-    depart_time=datetime.timedelta(hours=8, minutes=0),
+    depart_time=datetime.timedelta(hours=8, minutes=0)
 )
 
 truck2 = Truck.Truck(
+    name="Truck 2",
     packages=[3, 12, 17, 18, 19, 23, 24, 26, 27, 31, 35, 36, 38, 39],
     depart_time=datetime.timedelta(hours=9, minutes=10),
 )
 
 truck3 = Truck.Truck(
+    name="Truck 3",
     packages=[2, 4, 5, 7, 8, 9, 10, 11, 28, 32, 33],
     depart_time=datetime.timedelta(hours=11, minutes=5),
 )
@@ -41,7 +44,7 @@ num_of_packages = len(truck1.packages) + len(truck2.packages) + len(truck3.packa
 
 
 def deliver_packages(truck):
-    """Method for ordering the packages in a truck using the greedy algorithm nearest neighbor """
+    """Method for ordering the packages in a truck using the greedy algorithm: nearest neighbor """
     # create empty list to hole packages not yet delivered
     not_delivered = []
     # Loop through packages in a truck
@@ -54,28 +57,22 @@ def deliver_packages(truck):
     truck.packages.clear()
     # While loop to loop through all not_delivered packages
     while len(not_delivered) > 0:
-        # set address to be longer than any address we will get, so it will be replaced
+        # set address to be longer than any address we will get, so it will get replaced in first loop
         next_address_distance = 10000
         next_package = None
+        # Loop through packages in not_delivered list
         for package in not_delivered:
-            """ 
-                Conditional statement that gets the current truck address and the package address 
-                and compares it to the distance of the next address
-                The first loop will hit because the next address is set really high
-            """
-            if (
-                check_distance(
-                    get_address_id(truck.address), get_address_id(package.address)
-                )
-                <= next_address_distance
-            ):
-                # If the current address is a shorter distance then it will replace next_address value
-                next_address_distance = check_distance(
-                    get_address_id(truck.address), get_address_id(package.address)
-                )
+            # Save variable for the distance between the trucks current location and the potential next package to deliver
+            current_distance = check_distance(get_address_id(truck.address), get_address_id(package.address))
+            # If the current address is a shorter distance then it will replace next_address value
+            if (current_distance) <= next_address_distance:
+                next_address_distance = current_distance
+                # Save package object to next_package
                 next_package = package
         # Adds the package with the smallest distance from current address to the truck
         truck.packages.append(next_package.id)
+        # Update package with truck name
+        next_package.update_truck(truck.name)
         # Removes the delivered package from the not_delivered list
         not_delivered.remove(next_package)
         # Updates the trucks total mileage
@@ -91,7 +88,7 @@ def deliver_packages(truck):
 # start delivering packages
 deliver_packages(truck1)
 deliver_packages(truck2)
-# truck3's departure time will start once both truck1&2 are done
+# Dynamically change truck3's departure time based of truck1 and 2s times
 truck3.depart_time = min(truck1.time, truck2.time)
 deliver_packages(truck3)
 
@@ -102,7 +99,7 @@ def main():
     current_time = datetime.timedelta(hours=7, minutes=0)
 
     # Print welcome message
-    print("*" * 33)
+    print("\n" + "*" * 33)
     print(f"||  Welcome to the WGUPS CLI.  ||")
     print("*" * 33 )
 
@@ -119,7 +116,6 @@ def main():
         )
         # user input
         selection = input("Please enter the number of your selection:\n").strip()
-
         # Conditional statement to allow user to give options
         if selection == "1":
             hour = input("Please enter what hour it is (in military time):")
@@ -130,7 +126,7 @@ def main():
         elif selection == "2":
             print(f"\n\t*** Current time: {current_time} ***")
             # header
-            print("ID\t| Deadline\t| Status\t\t| Departure\t\t| Delivery\t\t| Address\t\t\t\t\t\t\t\t\t\t ; Notes")
+            print("ID\t| Deadline\t| Status\t\t| Departure\t\t| Delivery\t\t| Assigned Truck\t| Address\t\t\t\t\t\t\t\t\t\t ; Notes")
             print("-" * 140)
             # Loop through all packages
             for package_id in range(1, num_of_packages + 1):
@@ -149,7 +145,7 @@ def main():
                 if package.deadline == "EOD":
                     format = "\t"
                 print(
-                    f"{package.id}\t| {package.deadline}{format}\t| {package.status}\t| {timestamp}\t\t| {package.address}, {package.city}, {package.state}, {package.zipcode}; {package.notes}"
+                    f"{package.id}\t| {package.deadline}{format}\t| {package.status}\t| {timestamp}\t\t| {package.truck}\t\t\t| {package.address}, {package.city}, {package.state}, {package.zipcode}; {package.notes}"
                 )
             print("_" * 120)
         elif selection == "3":
@@ -169,6 +165,7 @@ def main():
         elif selection == "4":
             user_package_id = input("Enter package ID:\n").strip()
             package = package_hash_table.search(int(user_package_id))
+            package.update_status(current_time)
             # Update departure and delivery time if packages are on its way or delivered
             timestamp = (
                 "Departure Time: Awaiting pickup\n\t\t\tDelivery Time: Pending delivery"
@@ -185,7 +182,9 @@ def main():
             Delivery Deadline: {package.deadline}
             Current Status: {package.status}
             {timestamp}
-            Notes: {package.notes}"""
+            Assigned Truck: {package.truck}
+            Notes: {package.notes}
+                """
             )
             print("_" * 120)
         elif selection == "0":
