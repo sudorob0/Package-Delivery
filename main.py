@@ -20,20 +20,20 @@ package_hash_table = HashTable.ChainingHashTable()
 # create truck instances, manually load packages and set departure times
 truck1 = Truck.Truck(
     name="Truck 1",
-    packages=[1, 6, 13, 14, 15, 16, 20, 21, 22, 25, 29, 30, 34, 37, 40],
+    packages=[1, 2, 4, 13, 14, 15, 16, 20, 21, 22, 29, 30, 34, 37, 40],
     depart_time=datetime.timedelta(hours=8, minutes=0)
 )
 
 truck2 = Truck.Truck(
     name="Truck 2",
-    packages=[3, 12, 17, 18, 19, 23, 24, 26, 27, 31, 35, 36, 38, 39],
+    packages=[3, 6, 18, 25, 26, 27, 31, 32, 35, 36, 38, 39],
     depart_time=datetime.timedelta(hours=9, minutes=10),
 )
 
 truck3 = Truck.Truck(
     name="Truck 3",
-    packages=[2, 4, 5, 7, 8, 9, 10, 11, 28, 32, 33],
-    depart_time=datetime.timedelta(hours=11, minutes=5),
+    packages=[5, 7, 8, 9, 10, 11, 12, 17, 19, 23, 24, 28, 33],
+    depart_time=datetime.timedelta(hours=10, minutes=30),
 )
 
 # Load packages objects into the hash table
@@ -80,18 +80,25 @@ def deliver_packages(truck):
         # Updates truck's current address attribute to the package it drove to
         truck.address = next_package.address
         # Updates the trucks time with the time it took to deliver package
-        truck.time += datetime.timedelta(hours=next_address_distance / 18)
+        truck.time += datetime.timedelta(hours=next_address_distance / truck.speed)
         # Updates the package with the delivery and departure time of the truck
         next_package.delivery_time = truck.time
         next_package.departure_time = truck.depart_time
+    # Add mileage and time for the truck going back to the hub
+    distance_to_hub = check_distance(get_address_id(truck.address), get_address_id("4001 South 700 East"))
+    truck.mileage += distance_to_hub
+    truck.time += datetime.timedelta(hours=distance_to_hub / truck.speed)
 
 # start delivering packages
 deliver_packages(truck1)
 deliver_packages(truck2)
 # Dynamically change truck3's departure time based of truck1 and 2s times
-truck3.depart_time = min(truck1.time, truck2.time)
+if min(truck1.time, truck2.time) > datetime.timedelta(hours=10, minutes=30):
+    truck3.depart_time = min(truck1.time, truck2.time)
 deliver_packages(truck3)
 
+# find total mileage
+total_mileage = round((truck1.mileage + truck2.mileage + truck3.mileage), 2)
 
 def main():
     """ "Function for the CLI"""
@@ -105,6 +112,7 @@ def main():
 
     # Main loop.  Prompts user for actions until exit is chosen.
     while True:
+        print(f"Total Mileage: {total_mileage}")
         print(
             f""" 
     *** Current time: {current_time} ***
@@ -149,18 +157,18 @@ def main():
                 )
             print("_" * 120)
         elif selection == "3":
-            print("\nTruck #\t\t| Departure\t| Mileage\t| Location\t\t\t| Packages")
+            print("\nTruck #\t\t| Departure\t| Mileage\t| Location\t\t\t| Package Order")
             print("-" * 80)
             print(
-                f"Truck 1\t\t| {truck1.depart_time}\t| {truck1.mileage}\t\t| {truck1.address}\t| {truck1.packages}"
+                f"Truck 1\t\t| {truck1.depart_time}\t| {round(truck1.mileage, 2)}\t\t| {truck1.address}\t| {truck1.packages}"
             )
             print(
-                f"Truck 2\t\t| {truck2.depart_time}\t| {truck2.mileage}\t\t| {truck2.address}\t\t| {truck2.packages}"
+                f"Truck 2\t\t| {truck2.depart_time}\t| {round(truck2.mileage, 2)}\t\t| {truck2.address}\t\t| {truck2.packages}"
             )
             print(
-                f"Truck 3\t\t| {truck3.depart_time}\t| {truck3.mileage}\t\t| {truck3.address}\t\t| {truck3.packages}"
+                f"Truck 3\t\t| {truck3.depart_time}\t| {round(truck3.mileage, 2)}\t\t| {truck3.address}\t\t| {truck3.packages}"
             )
-            print(f"Total Mileage: {truck1.mileage + truck2.mileage + truck3.mileage}")
+            print(f"Total Mileage: {total_mileage}")
             print("_" * 120)
         elif selection == "4":
             user_package_id = input("Enter package ID:\n").strip()

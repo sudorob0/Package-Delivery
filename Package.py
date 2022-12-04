@@ -1,7 +1,6 @@
 from HashTable import ChainingHashTable
 import csv
 
-
 class Package:
     def __init__(
         self,
@@ -52,7 +51,12 @@ class Package:
             self.status = "At Hub\t"
 
     def update_truck(self, truck_name):
+        """update the truck the package is loaded into"""
         self.truck = truck_name
+
+    def update_address(self, address):
+        """Update the address of a package"""
+        self.address = address
 
 
 def load_package_data(filename, hash_table):
