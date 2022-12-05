@@ -51,7 +51,7 @@ def deliver_packages(truck):
     # Loop through packages in a truck
     for package_id in truck.packages:
         # Find package in the hash table
-        package = package_hash_table.search(package_id)
+        package = package_hash_table.lookup(package_id)
         # Add package to not_delivered list
         not_delivered.append(package)
     # Clear package list
@@ -97,7 +97,7 @@ deliver_packages(truck2)
 if min(truck1.time, truck2.time) > datetime.timedelta(hours=10, minutes=30):
     truck3.depart_time = min(truck1.time, truck2.time)
 # Updated package 9 with the correct address
-wrong_address_package = package_hash_table.search(9)
+wrong_address_package = package_hash_table.lookup(9)
 wrong_address_package.update_address("410 S State St", "Salt Lake City", "UT", 84111)
 deliver_packages(truck3)
 
@@ -143,7 +143,7 @@ def main():
             # Loop through all packages
             for package_id in range(1, num_of_packages + 1):
                 # Find package in hash table
-                package = package_hash_table.search(package_id)
+                package = package_hash_table.lookup(package_id)
                 # Update package status
                 package.update_status(current_time)
                 # Update departure and delivery time if packages are on its way or delivered
@@ -176,7 +176,7 @@ def main():
             print("_" * 120)
         elif selection == "4":
             user_package_id = input("Enter package ID:\n").strip()
-            package = package_hash_table.search(int(user_package_id))
+            package = package_hash_table.lookup(int(user_package_id))
             package.update_status(current_time)
             # Update departure and delivery time if packages are on its way or delivered
             timestamp = (

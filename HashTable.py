@@ -25,7 +25,7 @@ class ChainingHashTable:
         bucket_list.append(key_value)
         return True
 
-    def search(self, key):
+    def lookup(self, key):
         """Searches for a value in the hash table"""
         # get the bucket index base of the modulus of the key
         bucket = hash(key) % len(self.table)
