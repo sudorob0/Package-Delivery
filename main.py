@@ -11,8 +11,9 @@ import HashTable
 from Package import load_package_data
 from Distance import check_distance, get_address_id
 
-# Change these constants for your file locations
+# Change this constant for your file locations
 PACKAGE_FILE = "WGUPS Package File.csv"
+HUB_ADDRESS = "4001 South 700 East"
 
 # Create hash table instance to store packages
 package_hash_table = HashTable.ChainingHashTable()
@@ -85,7 +86,7 @@ def deliver_packages(truck):
         next_package.delivery_time = truck.time
         next_package.departure_time = truck.depart_time
     # Add mileage and time for the truck going back to the hub
-    distance_to_hub = check_distance(get_address_id(truck.address), get_address_id("4001 South 700 East"))
+    distance_to_hub = check_distance(get_address_id(truck.address), get_address_id(HUB_ADDRESS))
     truck.mileage += distance_to_hub
     truck.time += datetime.timedelta(hours=distance_to_hub / truck.speed)
 
@@ -95,6 +96,9 @@ deliver_packages(truck2)
 # Dynamically change truck3's departure time based of truck1 and 2s times
 if min(truck1.time, truck2.time) > datetime.timedelta(hours=10, minutes=30):
     truck3.depart_time = min(truck1.time, truck2.time)
+# Updated package 9 with the correct address
+wrong_address_package = package_hash_table.search(9)
+wrong_address_package.update_address("410 S State St", "Salt Lake City", "UT", 84111)
 deliver_packages(truck3)
 
 # find total mileage
@@ -153,7 +157,7 @@ def main():
                 if package.deadline == "EOD":
                     format = "\t"
                 print(
-                    f"{package.id}\t| {package.deadline}{format}\t| {package.status}\t| {timestamp}\t\t| {package.truck}\t\t\t| {package.address}, {package.city}, {package.state}, {package.zipcode}; {package.notes}"
+                    f"{package.id}\t| {package.deadline}{format}\t| {package.status}\t| {timestamp}\t\t| {package.truck}\t\t\t| {package}; {package.notes}"
                 )
             print("_" * 120)
         elif selection == "3":
@@ -185,7 +189,7 @@ def main():
             print(
                 f"""
             *** Current time: {current_time} ***
-            Address: {package.address}, {package.city}, {package.state}, {package.zipcode}
+            Address: {package}
             Weight: {package.weight}
             Delivery Deadline: {package.deadline}
             Current Status: {package.status}

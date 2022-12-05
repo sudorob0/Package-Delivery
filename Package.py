@@ -28,17 +28,11 @@ class Package:
         self.notes = notes
 
     def __str__(self):
-        return "%s, %s, %s, %s, %s, %s, %s, s% s%" % (
-            self.id,
+        return "%s, %s, %s, %s" % (
             self.address,
             self.city,
             self.state,
             self.zipcode,
-            self.weight,
-            self.deadline,
-            self.status,
-            self.truck,
-            self.notes
         )
 
     def update_status(self, current_time):
@@ -54,9 +48,12 @@ class Package:
         """update the truck the package is loaded into"""
         self.truck = truck_name
 
-    def update_address(self, address):
+    def update_address(self, address, city, state, zipcode):
         """Update the address of a package"""
         self.address = address
+        self.city = city
+        self.state = state
+        self.zipcode = zipcode
 
 
 def load_package_data(filename, hash_table):
