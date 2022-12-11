@@ -12,7 +12,7 @@ C950 WGUPS Algorithm Overview
 
 Overview: This is a program I wrote for my data structures and algorithms class. Its a program that load packages into deliver trucks. I use a greedy nearest neighbor algorithm to find an solution is order to deliver the packages in time.
 
-
+https://github.com/sudorob0/Package-Delivery/blob/main/Readme-pics/main-menu.png
 https://github.com/sudorob0/Package-Delivery/blob/main/Readme-pics/lookup.png
 ![alt text](https://github.com/sudorob0/Package-Delivery/blob/main/Readme-pics/lookup.png?raw=true)
 
