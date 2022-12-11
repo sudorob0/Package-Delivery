@@ -10,7 +10,8 @@
 
 C950 WGUPS Algorithm Overview
 
-Overview: This is a program I wrote for my data structures and algorithms class. Its a program that load packages into deliver trucks. I use a greedy nearest neighbor algorithm to find an solution is order to deliver the packages in time.
+Overview: This is a program I wrote for my data structures and algorithms class. This program uses a greedy nearest neighbor program to load the trucks with the packages in order to reuce the overall amount of miles the trucks would have to drive. It allows you to check the status of the trucks at diffrent times of the day.
+
 
 Main Menu
 
